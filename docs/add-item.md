@@ -7,7 +7,7 @@
 ## Afficher le formulaire 
 
 ```jsx
-// src/pages/TodoList.js
+// src/components/TodoList.js
 
 const TodoList = () => {
   // ...

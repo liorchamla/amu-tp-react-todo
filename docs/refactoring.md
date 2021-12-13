@@ -1,202 +1,138 @@
-# Refactoring des appels HTTP et système de modules
+# Refactoring des appels HTTP
 
-Notre application est en bonne voie ! Elle fonctionne plutôt bien mais son code, par contre, est assez peu clair et relativement entremêlé.
+## Sommaire
 
-Comme tout langage de programmation, Javascript (même ça lui a manqué pendant des décennies) s'est doté de la possibilité de répartir du code dans différents fichiers grâce à son système de **modules**.
+## But de l'exercice
 
-## Sommaire :
-- [But de l'exercice :](#but-de-l-exercice--)
-- [Créer un fichier api.js qui contiendra les appels HTTP](#créer-un-fichier-apijs-qui-contiendra-les-appels-http)
-- [Utiliser les fonctions refactorisées dans notre code principal](#utiliser-les-fonctions-refactorisées-dans-notre-code-principal)
-- [Ce que vous avez appris](#ce-que-vous-avez-appris--)
-
-## But de l'exercice :
-Nous allons commencer à refactoriser notre code de telle sorte qu'il gagne en clarté. Et pour ce faire nous utiliserons le système de modules de Javascript afin de répartir différents codes dans différents fichiers.
-
-Notre objectif est de centraliser toutes les lignes de code qui ont un rapport avec l'API dans un seul fichier, ainsi :
-1. Ces traitements pourront être rappelés facilement si on a de nouveaux besoins ;
-2. Notre code sera agnostique de ces détails d'appels HTTP et ne fera qu'appeler les fonctions telles que `loadTodoItemsFromApi()` sans se préoccuper de quel serveur est appelé ou de quels traitements sont réalisés lors de la réponse ;
-
-**Ici, on se concentrera sur le fonctionnement des modules et notament de la façon dont on peut rendre une fonction utilisable dans un autre fichier !**
-
-## Créer un fichier api.js qui contiendra les appels HTTP
-On veut donc centraliser dans un nouveau fichier *src/api.js* tout ce qui a un rapport avec notre service Supabase. 
-
-On peut donc extraire l'ensemble des appels `fetch()` qui sont dans notre fichier *src/app.js* et les confier à des fonctions dans le fichier *src/api.js*.
-
-**Attention : remplacez bien dans les 2 constantes votre identifiant Supabase ainsi que la clé d'API que vous trouverez tout deux sur votre projet Supabase**
+## Création d'un module spécifique aux appels HTTP
 
 ```js
-// src/api.js
 
-const SUPABASE_URL = "https://IDENTIFIANT_SUPABASE.supabase.co/rest/v1/todos";
-const SUPABASE_API_KEY = "CLE_API_SUPABASE";
+// src/api/http.js
 
-/**
- * Récupère les items sur Supabase
- * @returns Promise<array>
- */
-export const loadTodoItemsFromApi = () => {
-  return fetch(`${SUPABASE_URL}?order=created_at`, {
-    headers: {
-      apiKey: SUPABASE_API_KEY,
-    },
-  }).then((response) => response.json());
-};
+
+const SUPABASE_URL = "https://ubrnopsjlvwleakngnmr.supabase.co/rest/v1/todos";
+const SUPABASE_API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYzODE5MjQ4MSwiZXhwIjoxOTUzNzY4NDgxfQ.3JdQW11rNZNpvcehhwFVaofXL2agE5LDn_3O4BvSAHw";
+
+const SUPABASE_URL = "https://ubrnopsjlvwleakngnmr.supabase.co/rest/v1/todos";
+const SUPABASE_API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYzODE5MjQ4MSwiZXhwIjoxOTUzNzY4NDgxfQ.3JdQW11rNZNpvcehhwFVaofXL2agE5LDn_3O4BvSAHw";
 
 /**
- * Modifie le statut d'une tâche sur Supabase
- * @returns Promise<array>
+ * Permet de modifier le statut de la tâche dans l'API
+ * @param {number} id 
+ * @param {boolean} status 
+ * @returns Promise<{id: number, done: boolean, text: string}>
  */
-export const toggleComplete = (id, done) => {
-  return fetch(`${SUPABASE_URL}?id=eq.${id}`, {
-    method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-      apiKey: SUPABASE_API_KEY,
-      Prefer: "return=representation",
-    },
-    body: JSON.stringify({ done: done }),
-  });
-};
+export const toggleTaskInApi = (id, status) => {
+    return fetch(`${SUPABASE_URL}?id=eq.${id}`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+            apiKey: SUPABASE_API_KEY,
+            Prefer: "return=representation",
+        },
+        body: JSON.stringify({ done: status }),
+    });
+}
 
 /**
- * Créé une nouvelle tâche dans Supabase
- * @returns Promise<{id: number, text: string, done: boolean}>
+ * Ajoute une tâche dans l'API
+ * @param {{text: string, done: boolean}} task 
+ * @returns Promise<Array<{id: number, text: string, done: boolean}>>
  */
-export const saveTodoItemToApi = (item) => {
-  return fetch(SUPABASE_URL, {
-    method: "POST",
-    body: JSON.stringify(item),
-    headers: {
-      "Content-Type": "application/json",
-      apiKey: SUPABASE_API_KEY,
-      Prefer: "return=representation",
-    },
-  }).then((response) => response.json());
-};
+export const addTaskToApi = (task) => {
+    return fetch(SUPABASE_URL, {
+        method: "POST",
+        body: JSON.stringify(task),
+        headers: {
+            "Content-Type": "application/json",
+            apiKey: SUPABASE_API_KEY,
+            Prefer: "return=representation",
+        },
+    }).then((response) => response.json())
+}
+
+/**
+ * Récupère les donnes des tâches à partir de l'API
+ * @returns Promise<Array<{id: number, text: string, done: boolean}>>
+ */
+export const loadTasksFromApi = () => {
+    return fetch(`${SUPABASE_URL}?order=created_at`, {
+        headers: {
+            apiKey: SUPABASE_API_KEY,
+        },
+    }).then((response) => response.json())
+}
+
 ```
 
-Vous noterez la présence d'un mot clé devant nos fonctions qui pour l'instant n'avait pas été utilisé : `export`
+```jsx
+// src/pages/TodoListPage.js
 
-Ce mot clé explique à Javascript que ces fonctions, bien qu'écrites dans le fichier *src/api.js* pourront être utilisées dans d'autres fichiers. Dans le monde Javascript, on appelle ces fichiers **des modules** !
+import React, { useEffect, useState } from "react";
+import { addTaskToApi, loadTasksFromApi, toggleTaskInApi } from "../api/http";
+import TaskForm from "../components/TaskForm";
+import TodoList from "../components/TodoList";
 
-## Utiliser les fonctions refactorisées dans notre code principal
+const TodoListPage = () => {
+    const [state, setState] = useState([]);
 
-Lorsque l'on souhaite utiliser dans un module une fonction qui se trouve dans un autre module, il suffit de l'importer en précisant de quel module provient cette fonction.
+    const toggle = (id) => {
+        // Récupérons l'index de la tâche concernée
+        const idx = state.findIndex(task => task.id === id);
 
-**Important : le fonctionnement de l'export et de l'import marche aussi avec des classes ou des variables** !
+        // Créons une copie de la tâche concernée 
+        const item = { ...state[idx] };
 
-```js
-// src/app.js
+        // Appel HTTP en PATCH pour modifier la tâche
+        toggleTaskInApi(id, !item.done).then(() => {
+            // Lorsque le serveur a pris en compte la demande et nous a répond
+            // Nous modifions notre copie de tâche :
+            item.done = !item.done;
 
-// On importe dans notre module principal des fonctions en provenance
-// du module api.js
-import {
-  loadTodoItemsFromApi,
-  toggleComplete,
-  saveTodoItemToApi,
-} from "./api.js";
+            // Créons une copie du tableau d'origine
+            const stateCopy = [...state];
+            // Enfin remplaçons la tâche originale par la copie :
+            stateCopy[idx] = item;
+            // Et faisons évoluer le state : l'ancien tableau sera
+            // remplacé par le nouveau, et le rendu sera déclenché à nouveau
+            setState(stateCopy);
+        });
+    }
+
+    const addNewTask = (text) => {
+        // Créons une nouvelle tâche avec le text tapé dans l'input
+        const task = {
+            text: text,
+            done: false
+        };
+
+        addTaskToApi(task).then(() => {
+            // Remplaçons le tableau de tâches actuel par une copie
+            // qui contiendra en plus la nouvelle tâche :
+            setState([...state, task]);
+        })
+    }
+
+    // On utilise le hook useEffect, qui permet de créer un comportement
+    // qui aura lieu lors de CHAQUE rendu du composant React
+    // mais en passant un tableau de dépendances vide en deuxième paramètres, on explique à React que ce comportement 
+    // ne devra avoir lieu qu'une seule fois, au chargement du composant
+    useEffect(() => {
+        // Appel HTTP vers Supabase
+        loadTasksFromApi()
+            .then((items) => {
+                // On remplace la valeur actuel de state
+                // par le tableau d'items venant de l'API
+                setState(items);
+            });
+    }, []);
+
+    return <>
+        <TodoList tasks={state} onTaskToggle={toggle} />
+        <TaskForm onTaskAdded={addNewTask} />
+    </>
+}
+
+export default TodoListPage;
 ```
-
-On va remplacer tous les appels à `fetch()` dans notre code principal par l'appel de nos fonctions refactorisées :
-
-```js
-// src/app.js
-
-// Dès le chargement des élements du DOM
-document.addEventListener("DOMContentLoaded", () => {
-  // On appelle l'API pour récupérer les tâches
-  loadTodoItemsFromApi().then((items) => {
-    // Pour chaque tâche, on l'affiche dans l'interface
-    items.forEach((item) => addTodo(item));
-  });
-});
-
-/**
- * Gestion du click sur une Checkbox
- * @param {MouseEvent} e
- */
-const onClickCheckbox = (e) => {
-  // On récupère l'identifiant de la tâche cliquée (todo-1 ou todo-12 par exemple)
-  const inputId = e.target.id;
-  // On ne garde que la partie numérique (1 ou 12 par exemple)
-  const id = +inputId.split("-").pop();
-  // On récupère le fait que la checkbox soit cochée ou pas lors du click
-  const isDone = e.target.checked;
-
-  // On annule le comportement par défaut de l'événement (cocher ou décocher la case)
-  // Car on ne souhaite cocher / décocher que si le traitement va au bout
-  e.preventDefault();
-
-  // On appelle l'API afin de changer le statut de la tâche
-  toggleComplete(id, isDone).then(() => {
-    // Lorsque c'est terminé, on coche ou décoche la case
-    e.target.checked = isDone;
-  });
-};
-
-/**
- * Permet d'ajouter visuellement une tâche dans l'interface
- * @param {{id: number, text: string, done: boolean}} item
- */
-const addTodo = (item) => {
-  // On récupère le <ul>
-  const container = document.querySelector("ul");
-
-  // On intègre le HTML de la tâche à la fin du <ul>
-  container.insertAdjacentHTML(
-    "beforeend",
-    `
-        <li>
-            <label>
-                <input type="checkbox" id="todo-${item.id}" ${item.done ? "checked" : ""} /> 
-                ${item.text}
-            </label>
-        </li>
-    `
-  );
-
-  // Alors que la tâche a été ajoutée, on attache au click sur la checkbox la fonction onClickCheckbox
-  document
-    .querySelector("input#todo-" + item.id)
-    .addEventListener("click", onClickCheckbox);
-};
-
-// Gestion de la soumission du formulaire
-document.querySelector("form").addEventListener("submit", (e) => {
-  // On annule le comportement par défaut de la soumission 
-  // (qui aurait pour effet de recharger la page, ce qu'on ne souhaite pas vu qu'on souhaite gérer nous-même le comportement)
-  e.preventDefault();
-
-  // On récupère l' <input /> du formulaire
-  const input = document.querySelector('input[name="todo-text"]');
-
-  // On créé une tâche avec la valeur de l'<input />
-  const item = {
-    text: input.value,
-    done: false,
-  };
-  
-  // On appelle l'API afin de sauver la nouvelle tâche
-  saveTodoItemToApi(item).then((items) => {
-    // La réponse de l'API est un tableau avec les tâches
-    // touchées par le traitement, on prend la première (la seule en fait)
-    // Et on l'affiche dans l'interface
-    addTodo(items[0]);
-
-    // On vide l'<input /> et on remet le curseur dessus
-    input.value = "";
-    input.focus();
-  });
-});
-```
-Et voilà, normalement, tout devrait fonctionner correctement !
-
-# Ce que vous avez appris :
-* Créer différents modules (fichiers JS) afin de répartir correctement vos fonctions et vos responsabilités ;
-* Exporter des fonctions d'un module afin qu'elles soient utilisables dans un autre module ;
-* Importer des fonctions dans un module à partir d'un autre module ;
-* Centraliser certaines fonctions afin de pouvoir les réutiliser et les faire évoluer plus facilement ;
-
-[Revenir au sommaire](../README.md) ou [Passer à la suite : Routing et affichage dynamique](routing.md)

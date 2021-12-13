@@ -58,20 +58,24 @@ Avant de continuer, vous devrez tout de même essayer de comprendre l'API en vou
 
 Une fois dans la documentation de l'API, vous pourrez même sélectionner le menu "***todos***" dans la barre de gauche et voir les requêtes HTTP spécifiques à la table *todos*.
 
+Vous allez avoir besoin de votre identifiant de projet ainsi que de la clé de sécurité. Vous trouverez ces informations dans la partie *Authentication* de la documentation de l'API.
+
 ## Insérer une nouvelle tâche (Requêtes HTTP et Promesses)
 
 ```diff
-// src/pages/TodoList 
+// src/pages/TodoListPage.js 
 
-const TodoList = () => {
++ const SUPABASE_URL = "https://IDENTIFIANT_SUPABASE.supabase.co/rest/v1/todos";
++ const SUPABASE_API_KEY = "CLE_API_SUPABASE";
+
+const TodoListPage = () => {
     // ...
 
-  const onNewTask = (text) => {
-        // Créons une nouvelle tâche avec le text tapé dans l'input
+  const addNewTask = (text) => {
         const task = {
--           id: Date.now(),
-            text: text,
-            done: false
+-         id: Date.now(),
+          text: text,
+          done: false
         };
 
 +       // Appel HTTP vers Supabase en method POST
@@ -90,36 +94,10 @@ const TodoList = () => {
 +           });
     }
 
-    // ...
+  // ...
 }
 ```
-
-Nous ne souhaitons plus utiliser le tableau `TODO_ITEMS`, nous pouvons donc supprimer toute référence à celui ci.
-
-Vous allez avoir besoin de votre identifiant de projet ainsi que de la clé de sécurité. Vous trouverez ces informations dans la partie *Authentication* de la documentation de l'API.
-
-A la place, nous comptons récupérer les tâches via une requête HTTP et les afficher :
-
-```js
-// src/app.js
-
-const SUPABASE_URL = "https://IDENTIFIANT_SUPABASE.supabase.co/rest/v1/todos";
-const SUPABASE_API_KEY = "CLE_API_SUPABASE";
-
-// Lorsque les éléments du DOM sont tous connus
-document.addEventListener("DOMContentLoaded", () => {
-  // Appel HTTP vers Supabase
-  fetch(`${SUPABASE_URL}?order=created_at`, {
-    headers: {
-      apiKey: SUPABASE_API_KEY,
-    },
-  })
-    .then((response) => response.json())
-    .then((items) => {
-      items.forEach((item) => addTodo(item));
-    });
-});
-```
+Vous remarquez qu'on attend le retour de la requête HTTP avant de toucher à l'interface. On s'assure par là qu'on n'ajoute pas une tâche dans l'interface alors que par ailleurs on aurait eu un soucis avec l'API et la base de données (on appelle cela *l'approche pessimiste*).
 
 Comme vous pouvez vous en douter, une requête HTTP n'est pas instantannée, et vous ne pouvez donc pas compter sur le résultat immédiatement dans votre code.
 
@@ -145,102 +123,86 @@ Vous remarquez que nous n'avons pas rattaché un unique comportement pour la fin
 1. Un premier `.then()` qui pourra travailler sur la réponse http et qui retournera le JSON contenu dans la réponse ;
 2. Un deuxième `.then()` qui recevra la valeur retournée par le premier `.then()` (à savoir le JSON retourné par le serveur) et qui fera un nouveau traitement là dessus ;
 
-## Ajouter une tâche dans la base de données
-On a vu comment récupérer les tâches de la base de données et les projeter depuis notre Javascript jusqu'à l'interface HTML, il faut maintenant réussir aussi à ajouter une tâche dans la base de données afin que ses informations persistent.
+## Afficher la liste lors du chargement de la page
 
-On va donc pouvoir modifier la fonction qui gère la soumission du formulaire afin de ne plus donner un identifiant à la tâche (puisque la base de données s'en chargera automatiquement) mais aussi faire la requête HTTP avant que la tâche n'apparaisse dans l'interface :
+Nous ne souhaitons plus utiliser le tableau `TODO_ITEMS`, nous pouvons donc supprimer toute référence à celui ci.
 
-```diff
-// On souhaite réagir à chaque fois que le formulaire est soumis
-document.querySelector("form").addEventListener("submit", (e) => {
-    // On souhaite aussi empêcher le rechargement de la page
-    e.preventDefault();
+A la place, nous comptons récupérer les tâches via une requête HTTP et les afficher :
 
-    // On récupère l'input
-    const input = document.querySelector('input[name="todo-text"]');
+```jsx
+// src/pages/TodoListPage.js
 
-    // On créé une nouvelle tâche avec pour text la valeur tapée dans l'input
-    const item = {
--        id: Date.now(),
-        text: input.value,
-        done: false,
-    };
+const TodoListPage = () => {
+  // Désormais, on prend un tableau vide comme valeur par défaut
+  // pour la liste des tâches. Ce tableau évoluera lors du chargement
+  // du composant grâce au useEffect ci-dessous
+  const [state, setState] = useState([]);
 
--    // On appelle la fonction créée plus tôt qui ajoutera la tâche dans le <ul>
--    addTodo(item);
-+    fetch(SUPABASE_URL, {
-+        method: "POST",
-+        body: JSON.stringify(item),
-+        headers: {
-+            "Content-Type": "application/json",
-+            apiKey: SUPABASE_API_KEY,
-+            Prefer: "return=representation",
-+        },
-+    })
-+    .then((response) => response.json())
-+    .then((items) => {
-+      addTodo(items[0]);
-+      input.value = "";
-+      input.focus();
-+    });
+  // On utilise le hook useEffect, qui permet de créer un comportement
+  // qui aura lieu lors de CHAQUE rendu du composant React
+  // mais en passant un tableau de dépendances vide en deuxième paramètres, on explique à React que ce comportement 
+  // ne devra avoir lieu qu'une seule fois, au chargement du composant
+  useEffect(() => {
+      // Appel HTTP vers Supabase
+      fetch(`${SUPABASE_URL}?order=created_at`, {
+          headers: {
+              apiKey: SUPABASE_API_KEY,
+          },
+      })
+          .then((response) => response.json())
+          .then((items) => {
+              // On remplace la valeur actuel de state
+              // par le tableau d'items venant de l'API
+              setState(items);
+          });
+  }, []);
 
--    // On vide l'input et replace le curseur dedans
--   input.value = "";
--   input.focus();
-});
+  // ...
+}
 ```
-
-Vous remarquez qu'on attend le retour de la requête HTTP avant de toucher à l'interface. On s'assure par là qu'on n'ajoute pas une tâche dans l'interface alors que par ailleurs on aurait eu un soucis avec l'API et la base de données (on appelle cela *l'approche pessimiste*).
 
 ## Passer les éléments à "fait" ou "pas fait"
 
 On veut désormais aller un peu plus loin, de telle sorte qu'on permettre à l'utilisateur de décider si une tâche a été faite ou pas.
 
-Pour cela on souhaite avoir deux choses :
-1. Une fonction qui décidera quoi faire lorsqu'on click sur une checkbox ;
-2. Le rattachement de cette fonction à chaque checkbox qui sera générée automatiquement ;
-
-Commençons par créer une nouvelle fonction `onClickCheckbox` qui sera plus tard appelée à chaque click sur une checkbox, et qui sera chargée de faire la requête HTTP vers l'API afin de prévenir la base de données que le statut de la tâche a changé :
-
 ```js
-// src/app.js
-// Nous souhaitons intervenir lors d'un click sur une checkbox
-const onClickCheckbox = (e) => {
-    // Nous récupérons l'identifiant de la checkbox (ressemble à "todo-1" ou "todo-23" ...)
-  const inputId = e.target.id; 
-  // Nous en déduisons l'identifiant de la tâche dans Supabase (ne récupérant que le nombre)
-  const id = +inputId.split("-").pop();  
-  // On découvre si la checkbox était déjà cochée ou pas
-  const isDone = e.target.checked;
+// src/pages/TodoListPage.js
 
-  // Nous empêchons le comportement par défaut de l'événement (cocher ou décocher)
-  e.preventDefault();
+const TodoListPage = () => {
 
-  fetch(`${SUPABASE_URL}?id=eq.${id}`, {
-    method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-      apiKey: SUPABASE_API_KEY,
-      Prefer: "return=representation",
-    },
-    body: JSON.stringify({ done: isDone }),
-  }).then(() => {
-      // Lorsque le serveur a pris en compte la demande et nous a répond
-      // Nous cochons (ou décochons) la case
-    e.target.checked = isDone;
-  });
-};
-```
+  const toggle = (id) => {
+      // Récupérons l'index de la tâche concernée
+      const idx = state.findIndex(task => task.id === id);
 
-Ensuite, il nous faudra modifier la fonction `addTodo(item)` qui créé le visuel d'une tâche dans la liste afin qu'à chaque nouvelle tâche ajoutée dans l'interface, on rattache bien à la checkbox la fonction `onClickCheckbox` :
+      // Créons une copie de la tâche concernée 
+      const item = { ...state[idx] };
 
-```js
- // src/app.js à la fin de la fonction addTodo()
- document
-    // Nous sélectionnons la checkbox fraichement ajoutée au DOM
-    .querySelector("input#todo-" + item.id)
-    // Et nous lions la fonction onClickCheckbox au click 
-    .addEventListener("click", onClickCheckbox);
+      // Appel HTTP en PATCH pour modifier la tâche
+      fetch(`${SUPABASE_URL}?id=eq.${id}`, {
+          method: "PATCH",
+          headers: {
+              "Content-Type": "application/json",
+              apiKey: SUPABASE_API_KEY,
+              Prefer: "return=representation",
+          },
+          body: JSON.stringify({ done: !item.done }),
+      }).then(() => {
+          // Lorsque le serveur a pris en compte la demande et nous a répond
+          // Nous modifions notre copie de tâche :
+          item.done = !item.done;
+
+          // Créons une copie du tableau d'origine
+          const stateCopy = [...state];
+          // Enfin remplaçons la tâche originale par la copie :
+          stateCopy[idx] = item;
+          // Et faisons évoluer le state : l'ancien tableau sera
+          // remplacé par le nouveau, et le rendu sera déclenché à nouveau
+          setState(stateCopy);
+      });
+  }
+
+  //..
+}
 ```
 
 Et voilà, normalement, vous devriez désormais pouvoir afficher les tâches de la base de données, y ajouter une tâche et même modifier les tâches afin de faire varier leur statut !

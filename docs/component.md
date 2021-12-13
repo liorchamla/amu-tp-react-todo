@@ -78,7 +78,7 @@ npm install --save-dev @babel/core @babel/cli @babel/preset-env @babel/preset-re
 ```js
 // babel.config.js
 module.exports = {
-    presets: ["@babel/env", "@babel/preset-react"]
+    presets: [["@babel/preset-env", { targets: { node: 'current' } }], "@babel/preset-react"]
 }
 ```
 
