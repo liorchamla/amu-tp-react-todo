@@ -111,10 +111,30 @@ Notez que pour l'instant, le fichier dist/app.js ne contient absolument pas le c
 
 Vous pouvez maintenant aller sur votre navigateur et ouvrir la console de développement afin de vous assurer que vous obtenez bien le message **"Tout fonctionne"**.
 
+## L'avantage du watch avec Wepback
+
+Vous pourriez éventuellement trouver lourdingue de devoir lancer à chaque modification de votre code la commande `npm run dev` afin que Webpack fasse le bundling de l'application. 
+
+C'est pourquoi Webpack intègre une possibilité de "watching" (surveillance) de votre code source afin de se déclencher automatiquement à chaque changement.
+
+```diff
+// package.json
+
+"scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "webpack --mode development",
++    "watch": "webpack --mode development --watch",
+    "serve": "live-server --entry-point=./index.html"
+  },
+```
+
+En lançant la commande `npm run watch` vous verrez que Webpack va se lancer et ne plus vous rendre la main : il attend que des changements soient fait dans votre dossier *src/* pour se relancer automatiquement.
+
 # Ce que vous avez appris :
 * Utiliser NPM afin de gérer les dépendances (librairies ou outils) nécessaires à votre projet ;
 * Utiliser NPM afin de configurer des tâches que vous pourrez lancer ;
 * Utiliser Webpack pour "bundler" vos fichiers JS en un fichier unique (et bien plus) ;
 * Utiliser live-server afin de créer un petit serveur web et d'afficher votre application dans le navigateur ;
+* Utiliser l'option `--watch` de Webpack afin de ne pas avoir à relancer sans cesse le bundling de nos fichiers sources ;
 
 [Revenir au sommaire](../README.md) ou [Passer à la suite : Afficher la liste des tâches](display-list.md)

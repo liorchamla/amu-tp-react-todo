@@ -58,41 +58,7 @@ Avant de continuer, vous devrez tout de même essayer de comprendre l'API en vou
 
 Une fois dans la documentation de l'API, vous pourrez même sélectionner le menu "***todos***" dans la barre de gauche et voir les requêtes HTTP spécifiques à la table *todos*.
 
-## Insérer une nouvelle tâche (Requêtes HTTP et Promesses)
-
-```diff
-// src/pages/TodoList 
-
-const TodoList = () => {
-    // ...
-
-  const onNewTask = (text) => {
-        // Créons une nouvelle tâche avec le text tapé dans l'input
-        const task = {
--           id: Date.now(),
-            text: text,
-            done: false
-        };
-
-+       // Appel HTTP vers Supabase en method POST
-+       fetch(SUPABASE_URL, {
-+           method: "POST",
-+           body: JSON.stringify(task),
-+           headers: {
-+               "Content-Type": "application/json",
-+               apiKey: SUPABASE_API_KEY,
-+               Prefer: "return=representation",
-+           },
-+       })
-+           .then((response) => response.json())
-+           .then((items) => {
-+               setState([...state, items[0]]);
-+           });
-    }
-
-    // ...
-}
-```
+## Afficher les tâches (Requêtes HTTP et Promesses)
 
 Nous ne souhaitons plus utiliser le tableau `TODO_ITEMS`, nous pouvons donc supprimer toute référence à celui ci.
 
