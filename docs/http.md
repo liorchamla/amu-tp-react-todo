@@ -62,6 +62,8 @@ Vous allez avoir besoin de votre identifiant de projet ainsi que de la clé de s
 
 ## Insérer une nouvelle tâche (Requêtes HTTP et Promesses)
 
+Nous allons modifier le composant *TodoListPage* afin que la création d'une tâche implique une requête HTTP vers Supabase :
+
 ```diff
 // src/pages/TodoListPage.js 
 
@@ -161,9 +163,11 @@ const TodoListPage = () => {
 }
 ```
 
+Vous remarquez ici l'utilisation du hook `useEffect` qui permet de lancer un comportement à chaque fois que React affiche quelque chose dans le DOM. On peut néanmoins mitiger (ou piloter) ce comportement en passant en second paramètre un tableau des *dépendances* : cela explique à React que le comportement ne devra être exécuté que si l'une des variables listées dans le tableau change. En donnant un tableau vide `[]`, on fait en sorte que le comportement ne se déclenche qu'au premier rendu du composant, car quelque soit les rendus suivants, le comportement ne sera rejoué que si une des variables listées a changé. Et comme on ne lui liste aucune variable, évidemment, elles n'ont pas changé.
+
 ## Passer les éléments à "fait" ou "pas fait"
 
-On veut désormais aller un peu plus loin, de telle sorte qu'on permettre à l'utilisateur de décider si une tâche a été faite ou pas.
+On veut désormais aller un peu plus loin, de telle sorte qu'on permettre à l'utilisateur de décider si une tâche a été faite ou pas :
 
 ```js
 // src/pages/TodoListPage.js
@@ -212,5 +216,6 @@ Et voilà, normalement, vous devriez désormais pouvoir afficher les tâches de 
 * L'enchaînement de `.then()` à la suite d'une promesse afin d'enchaîner les travaux en raffinant les données ;
 * Découverte du service Supabase qui vous permet en quelques secondes de créer une base de données distante accessible par une API (mais pas que ;-)) ;
 * Découverte de la fonction `fetch()` permettant d'envoyer des requêtes HTTP ;
+* Découverte du hook `useEffect()` qui permet d'exécuter un comportement à un moment précis de la vie du composant ;
 
-[Revenir au sommaire](../README.md) ou [Passer à la suite : Refactoring et modules](routing.md)
+[Revenir au sommaire](../README.md) ou [Passer à la suite : Refactoring et modules](refactoring.md)
