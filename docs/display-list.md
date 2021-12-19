@@ -3,6 +3,14 @@
 Maintenant qu'on a compris comment créer et imprimer un arbre d'éléments dans le DOM via les Composants, on va pouvoir s'attaquer au sujet réel de ce TP : La gestion d'une liste des tâches !
 
 ## Sommaire
+  * [But de l'exercice](#but-de-l-exercice)
+  * [Modéliser une liste de tâches dans le JS](#modéliser-une-liste-de-t-ches-dans-le-js)
+  * [Impossibilité d'agir sur les checkbox](#impossibilité-d-agir-sur-les-checkbox)
+  * [Dynamisme des composants : la notion d'état (state)](#dynamisme-des-composants---la-notion-d-état--state-)
+  * [Flux de données dans un composant](#flux-de-données-dans-un-composant)
+  * [Dynamisons la liste des tâches](#dynamisons-la-liste-des-tâches)
+  * [Refactoring avant de continer](#refactoring-avant-de-continer)
+  * [Ce que vous avez appris](#ce-que-vous-avez-appris)
 
 ## But de l'exercice
 

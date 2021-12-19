@@ -3,6 +3,12 @@
 Puisque notre but est de mettre en pratique React, il nous faut absolument avoir une idée de ce que sont les **composants**, briques essentielles de toute application ou même script React !
 
 ## Sommaire
+  * [But de l'exercice](#but-de-l-exercice)
+  * [Dépendances à installer](#dépendances-à-installer)
+  * [Vérifions le fonctionnement avec un premier composant React](#vérifions-le-fonctionnement-avec-un-premier-composant-react)
+  * [A la découverte du JSX](#a-la-découverte-du-jsx)
+  * [Babel, l'acteur obligé](#babel--l-acteur-obligé)
+  * [Ce que vous avez appris](#ce-que-vous-avez-appris)
 
 ## But de l'exercice
 

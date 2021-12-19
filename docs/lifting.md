@@ -8,6 +8,13 @@ Notre application prend bonne forme ! Néanmoins, on trouve que le composant **T
 Beaucoup de choses pour un simple composant. On peut augmenter encore l'organisation de notre code, sa maintenabilité et sa testabilité en fragmentant ce composant en deux composants distincts : un qui gère la liste, l'autre qui gère le formulaire !
 
 ## Sommaire
+  * [But de l'exercice](#but-de-l-exercice)
+  * [Extraction du code du formulaire vers un composant TaskForm](#extraction-du-code-du-formulaire-vers-un-composant-taskform)
+  * [Le problème du partage d'état](#le-probl-me-du-partage-d--tat)
+  * [(Re)Découverte des props](#-re-d-couverte-des-props)
+  * [La limite des props](#la-limite-des-props)
+  * [La solution : *lifting state up*](#la-solution----lifting-state-up-)
+  * [Ce que vous avez appris](#ce-que-vous-avez-appris)
 
 ## But de l'exercice 
 

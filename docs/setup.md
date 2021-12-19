@@ -5,11 +5,12 @@ Dans la panoplie des outils Javascript modernes, le chef d'orchestre est le Node
 Comme pour tous les autres langages de programmation, le gestionnaire de dépendances (package manager) a pour mission de vous aider à installer, mettre à jour, supprimer et surtout lister les dépendances (librairies) dont votre projet est tributaire.
 
 ## Sommaire :
-  * [Initialiser la gestion de dépendances dans le projet](#initialiser-la-gestion-de-dépendances-dans-le-projet)
-  * [Installer le module bundler Webpack](#installer-le-module-bundler-webpack)
-  * [Lancer l'application dans le navigateur](#lancer-l-application-dans-le-navigateur)
-  * [Vérification de l'outillage et des liens](#vérification-de-l-outillage-et-des-liens)
-  * [Ce que vous avez appris ](#ce-que-vous-avez-appris--)
+* [Initialiser la gestion de dépendances dans le projet](#initialiser-la-gestion-de-dépendances-dans-le-projet)
+* [Installer le module bundler Webpack](#installer-le-module-bundler-webpack)
+* [Lancer l'application dans le navigateur](#lancer-l-application-dans-le-navigateur)
+* [Vérification de l'outillage et des liens](#vérification-de-l-outillage-et-des-liens)
+* [L'avantage du watch avec Wepback](#l-avantage-du-watch-avec-wepback)
+* [Ce que vous avez appris](#ce-que-vous-avez-appris--)
 
 ## Initialiser la gestion de dépendances dans le projet
 Pour pouvoir bénéficier des forces de NPM dans votre projet, vous devez tout d'abord créer le manifeste qui permettra de le configurer : le fichier package.json

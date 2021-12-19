@@ -3,6 +3,11 @@
 Continuons notre plongée dans React et avançons sur notre gestion des tâches en permettant à l'utilisateur de créer une nouvelle tâche !
 
 ## Sommaire
+  * [But de l'exercice](#but-de-l-exercice)
+  * [Afficher le formulaire](#afficher-le-formulaire)
+  * [Suivre la valeur de l'input à tout moment grâce à un état](#suivre-la-valeur-de-l-input-à-tout-moment-grâce-à-un-état)
+  * [Gestion de la soumission et ajout de la tâche](#gestion-de-la-soumission-et-ajout-de-la-tâche)
+  * [Ce que vous avez appris](#ce-que-vous-avez-appris)
 
 ## But de l'exercice
 Nous allons créer un formulaire dans le composant *TodoList* et apprendre comment réagir à sa soumission pour ajouter une nouvelle tâche à la liste !
