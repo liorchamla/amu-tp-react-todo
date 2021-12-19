@@ -45,7 +45,7 @@ Une fois que le projet est mis en place, vous pouvez tout simplement suivre le T
   * [Dynamisme des composants : la notion d'état (state)](#dynamisme-des-composants---la-notion-d-état--state-)
   * [Flux de données dans un composant](#flux-de-données-dans-un-composant)
   * [Dynamisons la liste des tâches](#dynamisons-la-liste-des-tâches)
-  * [Refactoring avant de continer](#refactoring-avant-de-continer)
+  * [Refactoring avant de continuer](#refactoring-avant-de-continuer)
   * [Ce que vous avez appris](#ce-que-vous-avez-appris)
 * [**Ajout d'une nouvelle tâche**](docs/add-item.md)
   * [But de l'exercice](#but-de-l-exercice)

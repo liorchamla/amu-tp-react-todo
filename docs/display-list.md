@@ -9,7 +9,7 @@ Maintenant qu'on a compris comment créer et imprimer un arbre d'éléments dans
   * [Dynamisme des composants : la notion d'état (state)](#dynamisme-des-composants---la-notion-d-état--state-)
   * [Flux de données dans un composant](#flux-de-données-dans-un-composant)
   * [Dynamisons la liste des tâches](#dynamisons-la-liste-des-tâches)
-  * [Refactoring avant de continer](#refactoring-avant-de-continer)
+  * [Refactoring avant de continuer](#refactoring-avant-de-continuer)
   * [Ce que vous avez appris](#ce-que-vous-avez-appris)
 
 ## But de l'exercice
@@ -191,7 +191,7 @@ En testant ces modifications sur le navigateur, vous constaterez qu'on a réussi
 
 Il se base sur un état pour créer un arbre d'éléments. Si l'on change l'état, il va regénérer un nouvel arbre d'éléments tenant compte de cette modification et va imprimer ce nouvel arbre sur l'interface (dans le DOM) !
 
-## Refactoring avant de continer
+## Refactoring avant de continuer
 
 Comme on compte créer une application assez large dans ce TP, essayons d'organiser notre code au mieux en refactorisant. Déplaçons le code du composant TodoList dans son propre fichier *src/components/TodoList.js* :
 
