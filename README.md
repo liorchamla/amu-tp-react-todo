@@ -5,7 +5,7 @@ Dans ce TP, vous allez créer une Single Page Application (SPA) en Vanilla JS da
 ## Mettre en place le projet en local
 Clonez ce dépôt où bon vous semble :
 ```bash
-git clone https://github.com/liorchamla/amu-tp-vanilla-todo.git
+git clone https://github.com/liorchamla/amu-tp-react-todo.git
 ```
 Ouvrez le dossier dans votre éditeur de code favoris !
 
@@ -14,7 +14,7 @@ Plutôt que de cloner le dépôt, vous pouvez aussi travailler directement en li
 
 Pour cela il vous faudra *forker* le dépôt sur votre propre compte (bouton *Fork* en haut à droite de GitHub). Une fois sur la page du fork (la copie de ce dépôt sur votre propre compte), vous pourrez simplement ajouter `gitpod.io/#` juste devant l'URL du dépôt.
 
-Par exemple, le lien suivant ouvrira **ce dépôt** dans Gitpod : https://gitpod.io/#https://github.com/liorchamla/amu-tp-vanilla-todo
+Par exemple, le lien suivant ouvrira **ce dépôt** dans Gitpod : https://gitpod.io/#https://github.com/liorchamla/amu-tp-react-todo
 
 **Attention : le travail ne sera pas sauvegardé d'une session de travail à l'autre, vous devrez systématiquement commit et push vos modifications si vous espérez les retrouver ensuite !**
 
