@@ -1,6 +1,6 @@
 # Créer une application React JS (Todo List)
 
-Dans ce TP, vous allez créer une Single Page Application (SPA) en Vanilla JS dans le but de découvrir différentes notions telles que les affichages dynamiques, la gestion des modules et du bundling, les appels HTTP et les promesses, le routage et bien sur les tests unitaires qui assureront la qualité et la non régression de vos codes.
+Dans ce TP, vous allez créer une Single Page Application (SPA) avec React dans le but de découvrir différentes notions telles que les composants, les states et props, la gestion des modules et du bundling, les appels HTTP et les promesses, le routage et bien sur les tests unitaires qui assureront la qualité et la non régression de vos codes.
 
 ## Mettre en place le projet en local
 Clonez ce dépôt où bon vous semble :
