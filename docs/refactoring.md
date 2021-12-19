@@ -5,7 +5,9 @@ Notre application est en bonne voie ! Elle fonctionne plutôt bien mais son code
 Comme tout langage de programmation, Javascript (même ça lui a manqué pendant des décennies) s'est doté de la possibilité de répartir du code dans différents fichiers grâce à son système de **modules** (qu'on utilise déjà depuis le début de notre projet).
 
 ## Sommaire :
-
+  * [But de l'exercice](#but-de-l-exercice--)
+  * [Créer un fichier http.js qui contiendra les appels HTTP](#créer-un-fichier-httpjs-qui-contiendra-les-appels-http)
+  * [Ce que vous avez appris](#ce-que-vous-avez-appris)
 
 ## But de l'exercice :
 Notre objectif est de centraliser toutes les lignes de code qui ont un rapport avec l'API dans un seul fichier, ainsi :
