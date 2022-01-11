@@ -138,4 +138,4 @@ En lançant la commande `npm run watch` vous verrez que Webpack va se lancer et 
 * Utiliser live-server afin de créer un petit serveur web et d'afficher votre application dans le navigateur ;
 * Utiliser l'option `--watch` de Webpack afin de ne pas avoir à relancer sans cesse le bundling de nos fichiers sources ;
 
-[Revenir au sommaire](../README.md) ou [Passer à la suite : Afficher la liste des tâches](display-list.md)
+[Revenir au sommaire](../README.md) ou [Passer à la suite : Premier composant React](component.md)
