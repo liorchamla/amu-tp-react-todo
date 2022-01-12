@@ -63,7 +63,7 @@ const TodoList = () => {
     return <ul>
         {TODO_ITEMS.map(item => <li key={item.id}>
             <label>
-                <input type="checkbox" id="todo-${item.id}" checked={item.done} />
+                <input type="checkbox" id={"todo-" + item.id} checked={item.done} />
                 {item.text}
             </label>
         </li>)}
