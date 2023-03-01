@@ -50,7 +50,7 @@ export const toggleTaskInApi = (id, status) => {
 /**
  * Ajoute une tâche dans l'API
  * @param {{text: string, done: boolean}} task 
- * @returns Promise<Array<{id: number, text: string, done: boolean}>>
+ * @returns Promise<{id: number, text: string, done: boolean}>
  */
 export const addTaskToApi = (task) => {
     return fetch(SUPABASE_URL, {
@@ -61,7 +61,9 @@ export const addTaskToApi = (task) => {
             apiKey: SUPABASE_API_KEY,
             Prefer: "return=representation",
         },
-    }).then((response) => response.json())
+    })
+     .then((response) => response.json())
+     .then(items => items[0]);
 }
 
 /**
