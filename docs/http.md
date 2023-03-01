@@ -91,8 +91,9 @@ const TodoListPage = () => {
 +           },
 +       })
 +           .then((response) => response.json())
-+           .then((items) => {
-+               setState([...state, items[0]]);
++           .then(items => items[0])
++           .then((item) => {
++               setState([...state, item]);
 +           });
     }
 
